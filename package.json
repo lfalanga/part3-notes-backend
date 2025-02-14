@@ -1,0 +1,35 @@
+{
+  "name": "notes-backend",
+  "version": "1.0.0",
+  "description": "fullstackopen.com part3 package.",
+  "keywords": [
+    "fullstackopen.com",
+    "nodejs",
+    "javascript",
+    "express"
+  ],
+  "homepage": "https://github.com/lfalanga/fullstack-open#readme",
+  "bugs": {
+    "url": "https://github.com/lfalanga/fullstack-open/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lfalanga/fullstack-open.git"
+  },
+  "license": "ISC",
+  "author": "Leandro Falanga",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.cjs",
+    "start": "node index.cjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

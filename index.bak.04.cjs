@@ -1,8 +1,14 @@
 require("dotenv").config();
 const express = require("express");
-var cors = require("cors");
 const app = express();
 var morgan = require("morgan");
+// const requestLogger = (request, response, next) => {
+//   console.log("[part3]: method:", request.method);
+//   console.log("[part3]: path:  ", request.path);
+//   console.log("[part3]: body:  ", request.body);
+//   console.log("---");
+//   next();
+// };
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint." });
 };
@@ -10,49 +16,34 @@ const unknownEndpoint = (request, response) => {
 // middleware
 app.use(express.static("build"));
 app.use(express.json());
+// app.use(requestLogger);
+// using morgan to log requests
+// using a predefined logging format 'tiny'
+// app.use(morgan("tiny"));
+// using format string of predefined tokens
+// app.use(
+//   morgan(":method :url :status :res[content-length] - :response-time ms")
+// );
+// using custom format function
+// app.use(
+//   morgan(function (tokens, req, res) {
+//     return [
+//       tokens.method(req, res),
+//       tokens.url(req, res),
+//       tokens.status(req, res),
+//       tokens.res(req, res, "content-length"),
+//       "-",
+//       tokens["response-time"](req, res),
+//       "ms",
+//       JSON.stringify(req.body),
+//     ].join(" ");
+//   })
+// );
 // using morgan custom token
 morgan.token("body", (req, res) => JSON.stringify(req.body));
-app.use(
-  morgan(":method :url :status :res[content-length] - :response-time ms :body")
-);
-// using cors
-app.use(cors());
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
 
 // database
-
-let notes = [
-  {
-    id: 1,
-    content: "HTML is easy.",
-    important: true,
-  },
-  {
-    id: 2,
-    content: "Browser can execute only JavaScript.",
-    important: false,
-  },
-  {
-    id: 3,
-    content: "GET and POST are the most important methods of HTTP protocol.",
-    important: true,
-  },
-  {
-    id: 4,
-    content: "Learn from your mistakes.",
-    important: false,
-  },
-  {
-    id: 5,
-    content: "Practice makes perfect.",
-    important: true,
-  },
-  {
-    id: 6,
-    content: "Persistence is key.",
-    important: true,
-  },
-];
-
 let persons = [
   {
     id: 1,
@@ -98,56 +89,17 @@ let persons = [
 
 // routes
 app.get("/", (request, response) => {
+  // console.log("[part3]: GET /: welcomming message.");
   response.send("<h1>Hello Part3!</h1>");
 });
 
-// notes
-app.get("/api/notes", (request, response) => {
-  response.json(notes);
-});
-
-app.get("/api/notes/:id", (request, response) => {
-  const id = request.params.id;
-  const note = notes.find((note) => note.id === Number(id));
-  if (note) {
-    response.json(note);
-  } else {
-    response.statusMessage = "Not Found: custom message.";
-    response.status(404).end();
-  }
-});
-
-app.delete("/api/notes/:id", (request, response) => {
-  const id = request.params.id;
-  notes = notes.filter((note) => note.id !== id);
-  console.log("[part3]: DELETE /api/notes/:id:", id);
-  response.statusMessage = "Deleted: custom message.";
-  response.status(204).end();
-});
-
-app.post("/api/notes", (request, response) => {
-  const body = request.body;
-  if (!body.content) {
-    return response.status(400).json({
-      error: "content missing.",
-    });
-  }
-  const note = {
-    content: body.content,
-    important: Boolean(body.important) || false,
-    id: generateId(),
-  };
-  notes = [...notes, note];
-  response.statusMessage = "Posted: custom message";
-  response.json(note);
-});
-
-// persons
 app.get("/api/persons", (request, response) => {
+  // console.log("[part3]: GET /api/persons.");
   response.json(persons);
 });
 
 app.get("/info", (request, response) => {
+  // console.log("[part3]: GET /info.");
   const totalPersons = persons.length;
   const timestamp = new Date();
   response.send(`
@@ -159,6 +111,7 @@ app.get("/info", (request, response) => {
 app.get("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
   const person = persons.find((p) => p.id === Number(id));
+  // console.log("[part3]: GET /api/person/:id:", person);
   if (person) {
     response.json(person);
   } else {
@@ -170,12 +123,14 @@ app.get("/api/persons/:id", (request, response) => {
 app.delete("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
   persons = persons.filter((p) => p.id !== id);
+  // console.log("[part3]: DELETE /api/persons/:id:", id);
   response.statusMessage = "Deleted: custom message.";
   response.status(204).end();
 });
 
 app.post("/api/persons", (request, response) => {
   const body = request.body;
+  // console.log("[part3]: POST /api/persons:", body);
   if (!body.name || !body.number) {
     return response.status(400).json({
       error: "content missing.",
@@ -191,6 +146,7 @@ app.post("/api/persons", (request, response) => {
     name: body.name,
     number: body.number || "999999999",
     id: Math.floor(Math.random() * 1000000),
+    // id: generateId(),
   };
   persons = [...persons, person];
   response.statusMessage = "Posted: custom message";
@@ -200,7 +156,7 @@ app.post("/api/persons", (request, response) => {
 // helper functions
 const generateId = () => {
   const maxId =
-    notes.length > 0 ? Math.max(...notes.map((n) => Number(n.id))) : 0;
+    persons.length > 0 ? Math.max(...persons.map((p) => Number(p.id))) : 0;
   return String(maxId + 1);
 };
 
@@ -208,6 +164,6 @@ const generateId = () => {
 app.use(unknownEndpoint);
 
 // server
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT);
 console.log(`[part3]: Server running on ${process.env.HOST}:${PORT}...`);

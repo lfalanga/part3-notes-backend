@@ -8,7 +8,7 @@ const unknownEndpoint = (request, response) => {
 };
 
 // middleware
-// app.use(express.static("build"));
+app.use(express.static("build"));
 app.use(express.static("dist"));
 app.use(express.json());
 // using morgan custom token

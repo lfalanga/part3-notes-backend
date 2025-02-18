@@ -101,6 +101,9 @@ let persons = [
 // app.get("/", (request, response) => {
 //   response.send("<h1>Hello Part3!</h1>");
 // });
+app.get("/home", (request, response) => {
+  response.send("<h1>Part3 Home Page!</h1>");
+});
 
 // notes
 app.get("/api/notes", (request, response) => {

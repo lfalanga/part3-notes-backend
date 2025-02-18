@@ -98,9 +98,9 @@ let persons = [
 ];
 
 // routes
-app.get("/", (request, response) => {
-  response.send("<h1>Hello Part3!</h1>");
-});
+// app.get("/", (request, response) => {
+//   response.send("<h1>Hello Part3!</h1>");
+// });
 app.get("/home", (request, response) => {
   response.send("<h1>Part3 Home Page!</h1>");
 });

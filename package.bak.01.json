@@ -25,7 +25,7 @@
   },
   "scripts": {
     "dev": "nodemon index.cjs",
-    "start": "heroku local web --port 5001",
+    "start": "node index.cjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

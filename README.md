@@ -5,4 +5,4 @@ Independent GitHub repository.
 Implementing git submodules based on [this article](https://www.freecodecamp.org/news/how-to-use-git-submodules).
 Modifing submodule tree.
 
-testing purposes.
+testing purposes *2.

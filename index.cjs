@@ -98,9 +98,9 @@ let persons = [
 ];
 
 // routes
-app.get("/", (request, response) => {
-  response.send("<h1>Part3 Home Page!</h1>");
-});
+// app.get("/", (request, response) => {
+//   response.send("<h1>Part3 Home Page!</h1>");
+// });
 
 // notes
 app.get("/api/notes", (request, response) => {
@@ -141,6 +141,22 @@ app.post("/api/notes", (request, response) => {
   notes = [...notes, note];
   response.statusMessage = "Posted: custom message";
   response.json(note);
+});
+
+app.put("/api/notes/:id", (request, response) => {
+  const id = Number(request.params.id);
+  const note = notes.find((n) => n.id === id);
+  if (note) {
+    const updatedNote = {
+      ...note,
+      important: !note.important,
+    };
+    notes = notes.map((n) => (n.id === id ? updatedNote : n));
+    response.json(updatedNote);
+  } else {
+    response.statusMessage = "Not Found: custom message.";
+    response.status(404).end();
+  }
 });
 
 // persons
@@ -200,7 +216,7 @@ app.post("/api/persons", (request, response) => {
 
 app.put("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
-  const person = persons.find((p) => p.id === Number(id));
+  const person = persons.find((p) => p.id === id);
   const body = request.body;
   if (!body.name || !body.number) {
     return response.status(400).json({

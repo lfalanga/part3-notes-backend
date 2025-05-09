@@ -24,8 +24,8 @@
     "node": "22.x"
   },
   "scripts": {
-    "dev": "node --watch index.cjs",
-    "start": "node index.cjs",
+    "dev": "nodemon index.cjs",
+    "start": "heroku local web --port 5001",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

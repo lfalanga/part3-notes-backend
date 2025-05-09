@@ -98,10 +98,7 @@ let persons = [
 ];
 
 // routes
-// app.get("/", (request, response) => {
-//   response.send("<h1>Hello Part3!</h1>");
-// });
-app.get("/home", (request, response) => {
+app.get("/", (request, response) => {
   response.send("<h1>Part3 Home Page!</h1>");
 });
 
@@ -123,7 +120,7 @@ app.get("/api/notes/:id", (request, response) => {
 
 app.delete("/api/notes/:id", (request, response) => {
   const id = request.params.id;
-  notes = notes.filter((note) => note.id !== id);
+  notes = notes.filter((note) => note.id !== Number(id));
   console.log("[part3]: DELETE /api/notes/:id:", id);
   response.statusMessage = "Deleted: custom message.";
   response.status(204).end();
@@ -201,11 +198,35 @@ app.post("/api/persons", (request, response) => {
   response.json(person);
 });
 
+app.put("/api/persons/:id", (request, response) => {
+  const id = Number(request.params.id);
+  const person = persons.find((p) => p.id === Number(id));
+  const body = request.body;
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: "content missing.",
+    });
+  }
+  if (person) {
+    const updatedPerson = {
+      ...person,
+      name: body.name,
+      number: body.number,
+    };
+    persons = persons.map((p) => (p.id === id ? updatedPerson : p));
+    // response.statusMessage = "Updated: custom message";
+    response.json(updatedPerson);
+  } else {
+    response.statusMessage = "Not Found: custom message.";
+    response.status(404).end();
+  }
+});
+
 // helper functions
 const generateId = () => {
   const maxId =
     notes.length > 0 ? Math.max(...notes.map((n) => Number(n.id))) : 0;
-  return String(maxId + 1);
+  return maxId + 1;
 };
 
 // unknown endpoint

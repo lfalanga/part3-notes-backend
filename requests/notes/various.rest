@@ -1,33 +1,27 @@
 GET http://localhost:3001/api/notes HTTP/1.1
 
 ###
-
 GET http://localhost:3001/api/notes/1 HTTP/1.1
 
 ###
-
-DELETE http://localhost:3001/api/notes/1 HTTP/1.1
+DELETE http://localhost:3001/api/notes/9 HTTP/1.1
 
 ###
-
 POST http://localhost:3001/api/notes HTTP/1.1
 content-type: application/json
 
 {
-    "content": "Desinformation is a ewapon of mass destruction.",
+    "content": "Desinformation is a weapon of mass destruction.",
     "important": true
 }
 
 ###
-
 GET https://example.com/comments/1 HTTP/1.1
 
 ###
-
 GET https://example.com/topics/1 HTTP/1.1
 
 ###
-
 POST https://example.com/comments HTTP/1.1
 content-type: application/json
 
